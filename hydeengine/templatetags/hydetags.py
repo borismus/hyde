@@ -3,6 +3,7 @@ import operator
 import os
 import re
 import string
+import random
 
 from django import template
 from django.conf import settings
@@ -161,7 +162,10 @@ class RecentPostsNode(template.Node):
             self.var = self.var.render(context)
 
         category_filter = None
-        if not self.categories is None:
+        randomize = False
+        if self.categories == '?':
+            randomize = True
+        elif self.categories is not None:
             category_filter = re.compile(self.categories)
 
         if (not hasattr(self.node, 'complete_page_list') or
@@ -173,7 +177,10 @@ class RecentPostsNode(template.Node):
                 self.node.complete_page_list = complete_page_list
 
         if category_filter is None:
-            context[self.var] = self.node.complete_page_list[:int(self.count)]
+            posts = self.node.complete_page_list
+            if randomize:
+                random.shuffle(posts)
+            context[self.var] = posts[:int(self.count)]
         else:
             posts = filter(lambda page: page.display_in_list and \
                                             reduce(lambda c1,c2: c1 or category_filter.match(c2) is not None, \

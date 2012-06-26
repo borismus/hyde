@@ -396,6 +396,7 @@ class Generator(object):
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
         add_to_builtins('hydeengine.templatetags.typogrify')
+        add_to_builtins('hydeengine.templatetags.youtubize')
         self.create_siteinfo()
 
     def create_siteinfo(self):
@@ -413,6 +414,7 @@ class Generator(object):
         self.notify(self.siteinfo.name, "Website Generation Started")
         try:
             self.pre_process(self.siteinfo)
+            print 'preprocessing'
             for resource in self.siteinfo.walk_resources():
                 self.process(resource)
             self.complete_generation()

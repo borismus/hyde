@@ -163,6 +163,7 @@ class JSmin:
         data = resource.source_file.read_all()
         out = jsmin.jsmin(data)
         resource.source_file.write(out)
+        print 'minified ' + `resource.source_file`
 
 class UglifyJS:
     @staticmethod
